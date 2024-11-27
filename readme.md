@@ -12,7 +12,7 @@ EcuCorte es una aplicación backend diseñada para procesar y gestionar informac
 ## Requisitos Previos
 
 -    Node.js (versión 18.x o superior)
--    npm (Node Package Manager)
+-    pnpm -> install: https://pnpm.io/installation#using-other-package-managers
 
 ## Instalación
 
@@ -26,7 +26,7 @@ cd ecucorte-express
 2. Instalar dependencias
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Configuración
@@ -43,7 +43,7 @@ PORT=3000
 Para iniciar el servidor en modo desarrollo:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 ## Endpoints
