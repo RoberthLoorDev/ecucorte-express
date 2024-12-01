@@ -1,6 +1,6 @@
 const express = require("express");
 const multer = require("multer");
-const { processPDF } = require("../utils/pdfProcessor");
+const { processPDF, processTXT, procesarTexto, parseTextToJson } = require("../utils/pdfProcessor");
 
 const router = express.Router();
 
@@ -27,11 +27,19 @@ router.post("/upload", upload.single("pdf"), async (req, res, next) => {
 
           const pdfText = await processPDF(req.file.buffer);
 
+          //
+          const txt = await processTXT(); //
+          const textInJson = parseTextToJson(txt);
+          console.log(textInJson);
+          //
+
           res.status(200).send(`
                <a href="/upload">Subir otro PDF</a>
                <h1>PDF procesado</h1>
+
                <p>Texto extraído del PDF:</p>
-               <pre>${pdfText}</pre>
+               <pre>${txt}</pre>
+
           `);
      } catch (error) {
           next(error);
