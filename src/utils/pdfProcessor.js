@@ -64,28 +64,33 @@ function parseTextToJson(txt) {
                dates.push(fecha);
           }
      }
-     //----------------------------------
 
      // ----------------Extraer cantones
      const cantones = cantons;
 
      const sectors = cantones.reduce((acc, canton) => {
           const regex = new RegExp(`${canton}\\s+(.*?)(?=(\\n\\n|\\n${cantones.join("|")}|$))`, "gs");
-          const match = regex.exec(txt);
-          if (match) {
+          let match;
+          while ((match = regex.exec(txt))) {
                const sectores = match[1]
+                    .replace(/[\r\n]+/g, " ") // Reemplaza saltos de línea por espacios
                     .split(",") // Divide por comas
-                    .map((s) => s.trim()) // Limpia espacios
+                    .map((s) => s.trim()) // Limpia espacios en los extremos
                     .filter(
                          (s) =>
                               s && // Elimina elementos vacíos
                               !/^\d{2}:\d{2}/.test(s) && // Filtra horarios (ej: "09:00 a 13:00")
                               !/Desde el|de diciembre|UNIDAD DE NEGOCIO|CANTÓN SECTORES/i.test(s) // Elimina texto no deseado
-                    );
-               acc[canton] = sectores;
+                    )
+                    .map((s) => s.replace(/\.$/, "")); // Elimina el punto final si existe
+               acc[canton] = acc[canton] ? acc[canton].concat(sectores) : sectores;
           }
           return acc;
      }, {});
+
+     console.log(sectors);
+
+     //--------
 
      return {
           region: province,
